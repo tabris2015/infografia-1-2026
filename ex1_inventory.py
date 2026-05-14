@@ -36,7 +36,10 @@ def valor_total(items: list[str], tabla: dict[str, int]) -> int:
     #
     # ejemplo: items=["pocion", "espada"], tabla={"pocion": 5, "espada": 50}
     #          -> 55
-    raise NotImplementedError("completar valor_total")
+    total = 0
+    for item in items:
+        total += tabla.get(item, 0)  # ignora items sin precio (extension 2)
+    return total
 
 
 def contar(items: list[str]) -> dict[str, int]:
@@ -47,7 +50,10 @@ def contar(items: list[str]) -> dict[str, int]:
     #        (tambien se puede usar dict.get(item, 0) + 1)
     #
     # ejemplo: ["a", "b", "a", "a"] -> {"a": 3, "b": 1}
-    raise NotImplementedError("completar contar")
+    conteo = {}
+    for item in items:
+        conteo[item] = conteo.get(item, 0) + 1
+    return conteo
 
 
 def mas_repetido(items: list[str]) -> str:
@@ -56,7 +62,8 @@ def mas_repetido(items: list[str]) -> str:
     # pista: reusar contar(items) y despues buscar la clave con mayor valor.
     #        se puede recorrer el dict con un for y guardar el maximo,
     #        o usar max(dict, key=dict.get).
-    raise NotImplementedError("completar mas_repetido")
+    conteo = contar(items)
+    return max(conteo, key=conteo.get)
 
 
 # TODO: usar las funciones de arriba para imprimir:
@@ -74,6 +81,16 @@ def mas_repetido(items: list[str]) -> str:
 #     llave:    1
 #   mas repetido: pocion
 
+print(f"valor total: {valor_total(inventario, precios)} oro")
+
+conteo = contar(inventario)
+print("conteo:")
+# extension 3: ordenado de mas a menos repetido
+for item, cantidad in sorted(conteo.items(), key=lambda x: x[1], reverse=True):
+    print(f"  {item}: {cantidad}")
+
+print(f"mas repetido: {mas_repetido(inventario)}")
+
 
 # extensiones opcionales (cuando lo de arriba ya funcione):
 # 1. agregar una funcion vender(items, tabla, item) que quite UNA aparicion
@@ -81,3 +98,10 @@ def mas_repetido(items: list[str]) -> str:
 # 2. hacer que valor_total ignore items que no estan en la tabla
 #    (en vez de fallar con KeyError).
 # 3. imprimir el conteo ordenado de mas a menos repetido.
+
+def vender(items: list[str], tabla: dict[str, int], item: str) -> int:
+    """Quita UNA aparicion del item de la lista y devuelve su precio (0 si no estaba)."""
+    if item in items:
+        items.remove(item)
+        return tabla.get(item, 0)
+    return 0
