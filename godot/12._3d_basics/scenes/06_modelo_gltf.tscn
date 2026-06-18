@@ -1,0 +1,55 @@
+[gd_scene load_steps=9 format=3 uid="uid://b3d12s06gltf"]
+
+; Escena 06 — Importar un modelo .gltf (✅ demo). La gema se instancia por código y
+; gira; el cubo de 1×1×1 es la regla para comparar escala. Ver scripts/modelo_gltf.gd
+
+[ext_resource type="Script" path="res://scripts/modelo_gltf.gd" id="1"]
+
+[sub_resource type="ProceduralSkyMaterial" id="sky_mat"]
+
+[sub_resource type="Sky" id="sky"]
+sky_material = SubResource("sky_mat")
+
+[sub_resource type="Environment" id="env"]
+background_mode = 2
+sky = SubResource("sky")
+ambient_light_source = 3
+tonemap_mode = 2
+
+[sub_resource type="StandardMaterial3D" id="mat_piso"]
+albedo_color = Color(0.22, 0.23, 0.28, 1)
+roughness = 0.9
+
+[sub_resource type="PlaneMesh" id="piso"]
+material = SubResource("mat_piso")
+size = Vector2(20, 20)
+
+[sub_resource type="StandardMaterial3D" id="mat_ref"]
+albedo_color = Color(0.5, 0.5, 0.55, 1)
+roughness = 0.8
+
+[sub_resource type="BoxMesh" id="ref"]
+material = SubResource("mat_ref")
+
+[node name="ModeloGltf" type="Node3D"]
+script = ExtResource("1")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("env")
+
+[node name="Sol" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.819, 0, 0.574, 0.47, 0.574, -0.671, -0.329, 0.819, 0.47, 0, 6, 0)
+shadow_enabled = true
+
+[node name="Camara" type="Camera3D" parent="."]
+transform = Transform3D(0.866, 0, -0.5, -0.25, 0.866, -0.433, 0.433, 0.5, 0.75, 4, 3.5, 6)
+
+[node name="Piso" type="MeshInstance3D" parent="."]
+mesh = SubResource("piso")
+
+[node name="Soporte" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 1, 0)
+
+[node name="CuboRegla" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0.5, 0)
+mesh = SubResource("ref")

@@ -13,12 +13,13 @@ extends ColorRect
 # Mientras falte cualquiera de las tres partes, H no hace nada visible.
 # Solución en _solutions/onda_solved.gd
 # ===========================================================================
-
+@export var duracion : float = 0.4
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("golpe"):
 		recibir_dano()
 
 func recibir_dano() -> void:
 	var mat := material as ShaderMaterial
-	# TODO (parte C): sube "intensidad" a 1.0 y bájala a 0.0 con un tween.
-	pass
+	mat.set_shader_parameter("intensidad", 1.0);
+	var tween = create_tween()
+	tween.tween_property(mat, "shader_parameter/intensidad", 0.0, duracion);

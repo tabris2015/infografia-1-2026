@@ -16,7 +16,9 @@ uniform float cantidad : hint_range(0.0, 1.0) = 0.0;
 void fragment() {
 	vec3 color = texture(pantalla, SCREEN_UV).rgb;
 	// TODO (en vivo): desatura el frame según "cantidad" — dos líneas:
-	//   float lum = dot(color, vec3(0.299, 0.587, 0.114));
-	//   color = mix(color, vec3(lum), cantidad);
+	if (cantidad == 1.0) {
+		color = vec3(1.0) - color;
+	};
+
 	COLOR = vec4(color, 1.0);
 }

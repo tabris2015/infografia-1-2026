@@ -1,8 +1,8 @@
-[gd_scene load_steps=11 format=3 uid="uid://sh10scene140001"]
+[gd_scene format=3 uid="uid://bdniav2n0kaku"]
 
-[ext_resource type="Texture2D" path="res://assets/piedra_diffuse.png" id="1_diffuse"]
-[ext_resource type="Texture2D" path="res://assets/piedra_normal.png" id="2_normal"]
-[ext_resource type="Script" path="res://scripts/luz.gd" id="3_luz"]
+[ext_resource type="Texture2D" uid="uid://o2i80ayw3j1d" path="res://assets/piedra_diffuse.png" id="1_diffuse"]
+[ext_resource type="Texture2D" uid="uid://dm1cu7sjqw53k" path="res://assets/piedra_normal.png" id="2_normal"]
+[ext_resource type="Script" uid="uid://bkttcit3rqqhx" path="res://scripts/luz.gd" id="3_luz"]
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_piedra"]
 diffuse_texture = ExtResource("1_diffuse")
@@ -30,31 +30,33 @@ font_color = Color(0.66, 0.7, 0.85, 1)
 [sub_resource type="LabelSettings" id="LabelSettings_pie"]
 font_size = 20
 
-[node name="LuzNormal" type="Node2D"]
+[node name="LuzNormal" type="Node2D" unique_id=990002052]
 
-[node name="Oscuridad" type="CanvasModulate" parent="."]
+[node name="Oscuridad" type="CanvasModulate" parent="." unique_id=937947288]
 color = Color(0.3, 0.3, 0.38, 1)
 
-[node name="PiedraConNormal" type="Sprite2D" parent="."]
+[node name="PiedraConNormal" type="Sprite2D" parent="." unique_id=88776302]
 position = Vector2(430, 390)
 scale = Vector2(1.5, 1.5)
 texture = SubResource("CanvasTexture_piedra")
 
-[node name="PiedraSinNormal" type="Sprite2D" parent="."]
+[node name="PiedraSinNormal" type="Sprite2D" parent="." unique_id=1084044790]
 position = Vector2(850, 390)
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("1_diffuse")
 
-[node name="Luz" type="PointLight2D" parent="."]
-position = Vector2(640, 360)
+[node name="Luz" type="PointLight2D" parent="." unique_id=1610639452]
+position = Vector2(408, 282)
+scale = Vector2(1.1796875, 1)
 energy = 1.3
 texture = SubResource("GradientTexture2D_luz")
 texture_scale = 2.0
+height = 78.0
 script = ExtResource("3_luz")
 
-[node name="UI" type="CanvasLayer" parent="."]
+[node name="UI" type="CanvasLayer" parent="." unique_id=1328120433]
 
-[node name="Titulo" type="Label" parent="UI"]
+[node name="Titulo" type="Label" parent="UI" unique_id=1860887282]
 offset_left = 40.0
 offset_top = 24.0
 offset_right = 1240.0
@@ -62,7 +64,7 @@ offset_bottom = 64.0
 text = "14 — Luz 2D + normal map: el sprite plano que parece tener volumen"
 label_settings = SubResource("LabelSettings_titulo")
 
-[node name="Nota" type="Label" parent="UI"]
+[node name="Nota" type="Label" parent="UI" unique_id=1011096170]
 offset_left = 40.0
 offset_top = 66.0
 offset_right = 1240.0
@@ -71,7 +73,7 @@ text = "Mueve el mouse: la antorcha lo sigue. Las dos piedras usan la MISMA imag
 la izquierda además lleva un normal map (CanvasTexture) y reacciona a la luz."
 label_settings = SubResource("LabelSettings_nota")
 
-[node name="PieCon" type="Label" parent="UI"]
+[node name="PieCon" type="Label" parent="UI" unique_id=876579392]
 offset_left = 300.0
 offset_top = 600.0
 offset_right = 560.0
@@ -80,7 +82,7 @@ text = "con normal map"
 label_settings = SubResource("LabelSettings_pie")
 horizontal_alignment = 1
 
-[node name="PieSin" type="Label" parent="UI"]
+[node name="PieSin" type="Label" parent="UI" unique_id=732411302]
 offset_left = 720.0
 offset_top = 600.0
 offset_right = 980.0

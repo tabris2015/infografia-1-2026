@@ -1,0 +1,56 @@
+[gd_scene load_steps=8 format=3 uid="uid://b3d12s01node3d"]
+
+; Escena 01 — Node3D + transform (✅ demo)
+; El primer 3D: un MeshInstance3D (caja) sobre un piso. La caja está TRASLADADA,
+; ROTADA y ESCALADA con un solo Transform3D. La cámara y la luz están puestas pero
+; todavía no son el tema (se explican en 03); aquí miramos el espacio y el transform.
+
+[sub_resource type="ProceduralSkyMaterial" id="sky_mat"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="sky"]
+sky_material = SubResource("sky_mat")
+
+[sub_resource type="Environment" id="env"]
+background_mode = 2
+sky = SubResource("sky")
+ambient_light_source = 3
+tonemap_mode = 2
+
+[sub_resource type="StandardMaterial3D" id="mat_piso"]
+albedo_color = Color(0.22, 0.23, 0.28, 1)
+roughness = 0.9
+
+[sub_resource type="PlaneMesh" id="piso"]
+material = SubResource("mat_piso")
+size = Vector2(20, 20)
+
+[sub_resource type="StandardMaterial3D" id="mat_caja"]
+albedo_color = Color(0.9, 0.45, 0.25, 1)
+roughness = 0.6
+
+[sub_resource type="BoxMesh" id="caja"]
+material = SubResource("mat_caja")
+
+[node name="Node3D_Transform" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("env")
+
+[node name="Sol" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.819, 0, 0.574, 0.47, 0.574, -0.671, -0.329, 0.819, 0.47, 0, 6, 0)
+shadow_enabled = true
+
+[node name="Camara" type="Camera3D" parent="."]
+transform = Transform3D(0.707, 0, -0.707, -0.408, 0.816, -0.408, 0.577, 0.577, 0.577, 5, 5, 5)
+
+[node name="Piso" type="MeshInstance3D" parent="."]
+mesh = SubResource("piso")
+
+; La caja: position (1.5, 0.5, 0), rotada 30° en Y, escala (1, 1.5, 1).
+; Todo eso es UN Transform3D. Compáralo con la matemática a mano del módulo 6:
+; aquí el motor arma y multiplica la matriz por ti.
+[node name="Caja" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.866, 0, -0.5, 0, 1.5, 0, 0.5, 0, 0.866, 1.5, 0.5, 0)
+mesh = SubResource("caja")

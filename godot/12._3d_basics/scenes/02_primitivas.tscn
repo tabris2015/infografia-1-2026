@@ -1,0 +1,86 @@
+[gd_scene load_steps=14 format=3 uid="uid://b3d12s02primitivas"]
+
+; Escena 02 — Primitivas (✅ demo)
+; Las mallas que Godot trae de fábrica: caja, esfera, cilindro, cápsula, plano.
+; Componer una escena = poner MeshInstance3D y moverlos en el espacio.
+
+[sub_resource type="ProceduralSkyMaterial" id="sky_mat"]
+
+[sub_resource type="Sky" id="sky"]
+sky_material = SubResource("sky_mat")
+
+[sub_resource type="Environment" id="env"]
+background_mode = 2
+sky = SubResource("sky")
+ambient_light_source = 3
+tonemap_mode = 2
+
+[sub_resource type="StandardMaterial3D" id="mat_piso"]
+albedo_color = Color(0.22, 0.23, 0.28, 1)
+roughness = 0.9
+
+[sub_resource type="PlaneMesh" id="piso"]
+material = SubResource("mat_piso")
+size = Vector2(20, 20)
+
+[sub_resource type="StandardMaterial3D" id="mat_caja"]
+albedo_color = Color(0.9, 0.35, 0.3, 1)
+
+[sub_resource type="BoxMesh" id="caja"]
+material = SubResource("mat_caja")
+
+[sub_resource type="StandardMaterial3D" id="mat_esfera"]
+albedo_color = Color(0.35, 0.75, 0.4, 1)
+
+[sub_resource type="SphereMesh" id="esfera"]
+material = SubResource("mat_esfera")
+radius = 0.6
+height = 1.2
+
+[sub_resource type="StandardMaterial3D" id="mat_cil"]
+albedo_color = Color(0.35, 0.55, 0.9, 1)
+
+[sub_resource type="CylinderMesh" id="cil"]
+material = SubResource("mat_cil")
+top_radius = 0.45
+bottom_radius = 0.45
+height = 1.2
+
+[sub_resource type="StandardMaterial3D" id="mat_cap"]
+albedo_color = Color(0.85, 0.7, 0.3, 1)
+
+[sub_resource type="CapsuleMesh" id="cap"]
+material = SubResource("mat_cap")
+radius = 0.4
+height = 1.4
+
+[node name="Primitivas" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("env")
+
+[node name="Sol" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.819, 0, 0.574, 0.47, 0.574, -0.671, -0.329, 0.819, 0.47, 0, 6, 0)
+shadow_enabled = true
+
+[node name="Camara" type="Camera3D" parent="."]
+transform = Transform3D(0.707, 0, -0.707, -0.408, 0.816, -0.408, 0.577, 0.577, 0.577, 6, 5, 6)
+
+[node name="Piso" type="MeshInstance3D" parent="."]
+mesh = SubResource("piso")
+
+[node name="Caja" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0.5, 0)
+mesh = SubResource("caja")
+
+[node name="Esfera" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0.6, 0)
+mesh = SubResource("esfera")
+
+[node name="Cilindro" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0.6, 0)
+mesh = SubResource("cil")
+
+[node name="Capsula" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0.7, 0)
+mesh = SubResource("cap")

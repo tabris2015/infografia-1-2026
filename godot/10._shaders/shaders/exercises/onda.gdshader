@@ -25,10 +25,15 @@ shader_type canvas_item;
 
 uniform sampler2D pantalla : hint_screen_texture, repeat_disable, filter_nearest;
 
-// TODO (parte A): declara acá el uniform float intensidad.
+uniform float intensidad : hint_range(0.0, 1.0) = 0.0;
 
 void fragment() {
 	vec3 color = texture(pantalla, SCREEN_UV).rgb;
-	// TODO (parte B): mezcla la viñeta roja según "intensidad".
+	
+	float dist = length(SCREEN_UV - vec2(0.5));
+	float borde = smoothstep(0.3, 0.7, dist);
+	
+	color = mix(color, vec3(0.8, 0.0, 0.0), borde * intensidad);
+	
 	COLOR = vec4(color, 1.0);
 }
