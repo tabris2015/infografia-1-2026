@@ -12,7 +12,7 @@ config_version=5
 
 config/name="12_3d_basics"
 config/description="Módulo 12 — Godot 3D básico: el espacio 3D y mover un cuerpo físico"
-run/main_scene="res://scenes/01_node3d_transform.tscn"
+run/main_scene="res://scenes/10_roll_a_ball.tscn"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
 

@@ -1,0 +1,131 @@
+[gd_scene load_steps=18 format=3 uid="uid://b3d12ej02rebote"]
+
+; 🎓 Ejercicio 2 — Zona rebotona. Edita scripts/exercises/rebote.gd. Roto: el pad verde
+; no hace nada. Rueda con WASD/flechas sobre el pad; debería lanzarte hacia arriba.
+
+[ext_resource type="Script" path="res://scripts/exercises/rebote.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/camara_seguir.gd" id="2"]
+[ext_resource type="PackedScene" uid="uid://b3d12jugador" path="res://actors/jugador.tscn" id="3"]
+
+[sub_resource type="ProceduralSkyMaterial" id="sky_mat"]
+
+[sub_resource type="Sky" id="sky"]
+sky_material = SubResource("sky_mat")
+
+[sub_resource type="Environment" id="env"]
+background_mode = 2
+sky = SubResource("sky")
+ambient_light_source = 3
+tonemap_mode = 2
+
+[sub_resource type="StandardMaterial3D" id="mat_piso"]
+albedo_color = Color(0.2, 0.22, 0.27, 1)
+roughness = 0.9
+
+[sub_resource type="PlaneMesh" id="piso_mesh"]
+material = SubResource("mat_piso")
+size = Vector2(16, 16)
+
+[sub_resource type="BoxShape3D" id="piso_shape"]
+size = Vector3(16, 0.5, 16)
+
+[sub_resource type="StandardMaterial3D" id="mat_muro"]
+albedo_color = Color(0.3, 0.32, 0.4, 1)
+roughness = 0.8
+
+[sub_resource type="BoxMesh" id="muro_mesh_x"]
+material = SubResource("mat_muro")
+size = Vector3(16, 1.5, 0.5)
+
+[sub_resource type="BoxShape3D" id="muro_shape_x"]
+size = Vector3(16, 1.5, 0.5)
+
+[sub_resource type="BoxMesh" id="muro_mesh_z"]
+material = SubResource("mat_muro")
+size = Vector3(0.5, 1.5, 16)
+
+[sub_resource type="BoxShape3D" id="muro_shape_z"]
+size = Vector3(0.5, 1.5, 16)
+
+[sub_resource type="BoxShape3D" id="tramp_shape"]
+size = Vector3(3, 1, 3)
+
+[sub_resource type="StandardMaterial3D" id="mat_tramp"]
+albedo_color = Color(0.3, 0.85, 0.4, 1)
+emission_enabled = true
+emission = Color(0.2, 0.7, 0.3, 1)
+emission_energy_multiplier = 0.8
+
+[sub_resource type="BoxMesh" id="tramp_mesh"]
+material = SubResource("mat_tramp")
+size = Vector3(3, 0.2, 3)
+
+[node name="Rebote" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("env")
+
+[node name="Sol" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.819, 0, 0.574, 0.47, 0.574, -0.671, -0.329, 0.819, 0.47, 0, 6, 0)
+shadow_enabled = true
+
+[node name="Camara" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7, 9)
+script = ExtResource("2")
+objetivo_path = NodePath("../Jugador")
+
+[node name="Piso" type="StaticBody3D" parent="."]
+
+[node name="Forma" type="CollisionShape3D" parent="Piso"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.25, 0)
+shape = SubResource("piso_shape")
+
+[node name="Malla" type="MeshInstance3D" parent="Piso"]
+mesh = SubResource("piso_mesh")
+
+[node name="Muros" type="StaticBody3D" parent="."]
+
+[node name="FormaN" type="CollisionShape3D" parent="Muros"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, -8)
+shape = SubResource("muro_shape_x")
+
+[node name="MallaN" type="MeshInstance3D" parent="Muros"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, -8)
+mesh = SubResource("muro_mesh_x")
+
+[node name="FormaS" type="CollisionShape3D" parent="Muros"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 8)
+shape = SubResource("muro_shape_x")
+
+[node name="MallaS" type="MeshInstance3D" parent="Muros"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 8)
+mesh = SubResource("muro_mesh_x")
+
+[node name="FormaE" type="CollisionShape3D" parent="Muros"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0.75, 0)
+shape = SubResource("muro_shape_z")
+
+[node name="MallaE" type="MeshInstance3D" parent="Muros"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0.75, 0)
+mesh = SubResource("muro_mesh_z")
+
+[node name="FormaO" type="CollisionShape3D" parent="Muros"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0.75, 0)
+shape = SubResource("muro_shape_z")
+
+[node name="MallaO" type="MeshInstance3D" parent="Muros"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0.75, 0)
+mesh = SubResource("muro_mesh_z")
+
+[node name="Trampolin" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, -2)
+script = ExtResource("1")
+
+[node name="Forma" type="CollisionShape3D" parent="Trampolin"]
+shape = SubResource("tramp_shape")
+
+[node name="Malla" type="MeshInstance3D" parent="Trampolin"]
+mesh = SubResource("tramp_mesh")
+
+[node name="Jugador" parent="." instance=ExtResource("3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 4)

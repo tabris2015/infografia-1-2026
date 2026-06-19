@@ -1,0 +1,196 @@
+[gd_scene load_steps=19 format=3 uid="uid://b3d12s10rollaball"]
+
+; Escena 10 — Roll-a-ball (✅ demo, escena PRINCIPAL). Junta las 10 monedas para ganar.
+; Rueda con WASD/flechas, esquiva los pilares, R para reiniciar. Reúne todo lo de la
+; sesión 2: RigidBody3D + fuerzas, StaticBody3D, Area3D, cámara que sigue y HUD por señales.
+
+[ext_resource type="Script" path="res://scripts/nivel.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/camara_seguir.gd" id="2"]
+[ext_resource type="PackedScene" uid="uid://b3d12jugador" path="res://actors/jugador.tscn" id="3"]
+[ext_resource type="PackedScene" uid="uid://b3d12moneda" path="res://actors/moneda.tscn" id="4"]
+
+[sub_resource type="ProceduralSkyMaterial" id="sky_mat"]
+
+[sub_resource type="Sky" id="sky"]
+sky_material = SubResource("sky_mat")
+
+[sub_resource type="Environment" id="env"]
+background_mode = 2
+sky = SubResource("sky")
+ambient_light_source = 3
+tonemap_mode = 2
+
+[sub_resource type="StandardMaterial3D" id="mat_piso"]
+albedo_color = Color(0.2, 0.22, 0.27, 1)
+roughness = 0.9
+
+[sub_resource type="PlaneMesh" id="piso_mesh"]
+material = SubResource("mat_piso")
+size = Vector2(24, 24)
+
+[sub_resource type="BoxShape3D" id="piso_shape"]
+size = Vector3(24, 0.5, 24)
+
+[sub_resource type="StandardMaterial3D" id="mat_muro"]
+albedo_color = Color(0.3, 0.32, 0.4, 1)
+roughness = 0.8
+
+[sub_resource type="BoxMesh" id="muro_mesh_x"]
+material = SubResource("mat_muro")
+size = Vector3(24, 1.5, 0.5)
+
+[sub_resource type="BoxShape3D" id="muro_shape_x"]
+size = Vector3(24, 1.5, 0.5)
+
+[sub_resource type="BoxMesh" id="muro_mesh_z"]
+material = SubResource("mat_muro")
+size = Vector3(0.5, 1.5, 24)
+
+[sub_resource type="BoxShape3D" id="muro_shape_z"]
+size = Vector3(0.5, 1.5, 24)
+
+[sub_resource type="StandardMaterial3D" id="mat_pilar"]
+albedo_color = Color(0.45, 0.4, 0.5, 1)
+roughness = 0.7
+
+[sub_resource type="BoxMesh" id="pilar_mesh"]
+material = SubResource("mat_pilar")
+size = Vector3(1.5, 3, 1.5)
+
+[sub_resource type="BoxShape3D" id="pilar_shape"]
+size = Vector3(1.5, 3, 1.5)
+
+[node name="Nivel" type="Node3D"]
+script = ExtResource("1")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("env")
+
+[node name="Sol" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.819, 0, 0.574, 0.47, 0.574, -0.671, -0.329, 0.819, 0.47, 0, 6, 0)
+shadow_enabled = true
+
+[node name="Camara" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 10)
+script = ExtResource("2")
+objetivo_path = NodePath("../Jugador")
+
+[node name="Piso" type="StaticBody3D" parent="."]
+
+[node name="Forma" type="CollisionShape3D" parent="Piso"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.25, 0)
+shape = SubResource("piso_shape")
+
+[node name="Malla" type="MeshInstance3D" parent="Piso"]
+mesh = SubResource("piso_mesh")
+
+[node name="Muros" type="StaticBody3D" parent="."]
+
+[node name="FormaN" type="CollisionShape3D" parent="Muros"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, -12)
+shape = SubResource("muro_shape_x")
+
+[node name="MallaN" type="MeshInstance3D" parent="Muros"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, -12)
+mesh = SubResource("muro_mesh_x")
+
+[node name="FormaS" type="CollisionShape3D" parent="Muros"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 12)
+shape = SubResource("muro_shape_x")
+
+[node name="MallaS" type="MeshInstance3D" parent="Muros"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 12)
+mesh = SubResource("muro_mesh_x")
+
+[node name="FormaE" type="CollisionShape3D" parent="Muros"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0.75, 0)
+shape = SubResource("muro_shape_z")
+
+[node name="MallaE" type="MeshInstance3D" parent="Muros"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0.75, 0)
+mesh = SubResource("muro_mesh_z")
+
+[node name="FormaO" type="CollisionShape3D" parent="Muros"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 0.75, 0)
+shape = SubResource("muro_shape_z")
+
+[node name="MallaO" type="MeshInstance3D" parent="Muros"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 0.75, 0)
+mesh = SubResource("muro_mesh_z")
+
+[node name="Pilares" type="StaticBody3D" parent="."]
+
+[node name="Forma1" type="CollisionShape3D" parent="Pilares"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 1.5, 0)
+shape = SubResource("pilar_shape")
+
+[node name="Malla1" type="MeshInstance3D" parent="Pilares"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 1.5, 0)
+mesh = SubResource("pilar_mesh")
+
+[node name="Forma2" type="CollisionShape3D" parent="Pilares"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 1.5, 0)
+shape = SubResource("pilar_shape")
+
+[node name="Malla2" type="MeshInstance3D" parent="Pilares"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 1.5, 0)
+mesh = SubResource("pilar_mesh")
+
+[node name="Forma3" type="CollisionShape3D" parent="Pilares"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 6)
+shape = SubResource("pilar_shape")
+
+[node name="Malla3" type="MeshInstance3D" parent="Pilares"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 6)
+mesh = SubResource("pilar_mesh")
+
+[node name="Forma4" type="CollisionShape3D" parent="Pilares"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -6)
+shape = SubResource("pilar_shape")
+
+[node name="Malla4" type="MeshInstance3D" parent="Pilares"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -6)
+mesh = SubResource("pilar_mesh")
+
+[node name="Jugador" parent="." instance=ExtResource("3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 9)
+
+[node name="Moneda1" parent="." instance=ExtResource("4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 0.6, 9)
+
+[node name="Moneda2" parent="." instance=ExtResource("4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 0.6, 9)
+
+[node name="Moneda3" parent="." instance=ExtResource("4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 0.6, -9)
+
+[node name="Moneda4" parent="." instance=ExtResource("4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 0.6, -9)
+
+[node name="Moneda5" parent="." instance=ExtResource("4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
+
+[node name="Moneda6" parent="." instance=ExtResource("4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0.6, -3)
+
+[node name="Moneda7" parent="." instance=ExtResource("4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0.6, 3)
+
+[node name="Moneda8" parent="." instance=ExtResource("4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 0.6, 2)
+
+[node name="Moneda9" parent="." instance=ExtResource("4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 0.6, -2)
+
+[node name="Moneda10" parent="." instance=ExtResource("4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0.6, 9)
+
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="Etiqueta" type="Label" parent="HUD"]
+offset_left = 18.0
+offset_top = 12.0
+offset_right = 460.0
+offset_bottom = 52.0
+theme_override_font_sizes/font_size = 28
+text = "Monedas: 0 / 0"

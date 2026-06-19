@@ -1,0 +1,34 @@
+[gd_scene load_steps=5 format=3 uid="uid://b3d12moneda"]
+
+; Moneda reusable: un Area3D (detecta, no choca) con su forma y un disco dorado que gira.
+; Está en el grupo "monedas" para que el nivel la encuentre y cuente. Ver scripts/moneda.gd
+
+[ext_resource type="Script" path="res://scripts/moneda.gd" id="1"]
+
+[sub_resource type="CylinderShape3D" id="forma"]
+radius = 0.5
+height = 1.0
+
+[sub_resource type="StandardMaterial3D" id="mat"]
+albedo_color = Color(0.95, 0.8, 0.2, 1)
+metallic = 0.7
+roughness = 0.3
+emission_enabled = true
+emission = Color(0.6, 0.45, 0.05, 1)
+emission_energy_multiplier = 0.6
+
+[sub_resource type="CylinderMesh" id="malla"]
+material = SubResource("mat")
+top_radius = 0.45
+bottom_radius = 0.45
+height = 0.14
+
+[node name="Moneda" type="Area3D" groups=["monedas"]]
+script = ExtResource("1")
+
+[node name="Forma" type="CollisionShape3D" parent="."]
+shape = SubResource("forma")
+
+[node name="Malla" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0, 0)
+mesh = SubResource("malla")

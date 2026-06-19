@@ -1,0 +1,109 @@
+[gd_scene load_steps=14 format=3 uid="uid://b3d12s08fuerzas"]
+
+; Escena 08 — Empujar la bola (🔨 placeholder). WASD/flechas no hacen NADA hasta escribir
+; la línea del TODO en scripts/pelota.gd. Las cajas están para empujarlas al rodar.
+
+[ext_resource type="Script" path="res://scripts/pelota.gd" id="1"]
+
+[sub_resource type="ProceduralSkyMaterial" id="sky_mat"]
+
+[sub_resource type="Sky" id="sky"]
+sky_material = SubResource("sky_mat")
+
+[sub_resource type="Environment" id="env"]
+background_mode = 2
+sky = SubResource("sky")
+ambient_light_source = 3
+tonemap_mode = 2
+
+[sub_resource type="StandardMaterial3D" id="mat_piso"]
+albedo_color = Color(0.22, 0.23, 0.28, 1)
+roughness = 0.9
+
+[sub_resource type="PlaneMesh" id="piso_mesh"]
+material = SubResource("mat_piso")
+size = Vector2(20, 20)
+
+[sub_resource type="BoxShape3D" id="piso_shape"]
+size = Vector3(20, 0.5, 20)
+
+[sub_resource type="StandardMaterial3D" id="mat_bola"]
+albedo_color = Color(0.95, 0.5, 0.2, 1)
+roughness = 0.4
+metallic = 0.2
+
+[sub_resource type="SphereShape3D" id="bola_shape"]
+radius = 0.5
+
+[sub_resource type="SphereMesh" id="bola_mesh"]
+material = SubResource("mat_bola")
+radius = 0.5
+height = 1.0
+
+[sub_resource type="StandardMaterial3D" id="mat_caja"]
+albedo_color = Color(0.35, 0.55, 0.9, 1)
+roughness = 0.6
+
+[sub_resource type="BoxShape3D" id="caja_shape"]
+size = Vector3(1, 1, 1)
+
+[sub_resource type="BoxMesh" id="caja_mesh"]
+material = SubResource("mat_caja")
+
+[node name="InputFuerzas" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("env")
+
+[node name="Sol" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.819, 0, 0.574, 0.47, 0.574, -0.671, -0.329, 0.819, 0.47, 0, 6, 0)
+shadow_enabled = true
+
+[node name="Camara" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.866, -0.5, 0, 0.5, 0.866, 0, 7, 11)
+
+[node name="Piso" type="StaticBody3D" parent="."]
+
+[node name="Forma" type="CollisionShape3D" parent="Piso"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.25, 0)
+shape = SubResource("piso_shape")
+
+[node name="Malla" type="MeshInstance3D" parent="Piso"]
+mesh = SubResource("piso_mesh")
+
+[node name="Pelota" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 3)
+script = ExtResource("1")
+
+[node name="Forma" type="CollisionShape3D" parent="Pelota"]
+shape = SubResource("bola_shape")
+
+[node name="Malla" type="MeshInstance3D" parent="Pelota"]
+mesh = SubResource("bola_mesh")
+
+[node name="Bolo1" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0.5, -1)
+
+[node name="Forma" type="CollisionShape3D" parent="Bolo1"]
+shape = SubResource("caja_shape")
+
+[node name="Malla" type="MeshInstance3D" parent="Bolo1"]
+mesh = SubResource("caja_mesh")
+
+[node name="Bolo2" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0.5, -1)
+
+[node name="Forma" type="CollisionShape3D" parent="Bolo2"]
+shape = SubResource("caja_shape")
+
+[node name="Malla" type="MeshInstance3D" parent="Bolo2"]
+mesh = SubResource("caja_mesh")
+
+[node name="Bolo3" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -2.2)
+
+[node name="Forma" type="CollisionShape3D" parent="Bolo3"]
+shape = SubResource("caja_shape")
+
+[node name="Malla" type="MeshInstance3D" parent="Bolo3"]
+mesh = SubResource("caja_mesh")
